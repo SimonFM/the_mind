@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>The Mind</title>
+  <link href="/mindfulness/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/mindfulness/main.css" rel="stylesheet">
+  <script src="/mindfulness/webjars/jquery/jquery.min.js"></script>
+  <script src="/mindfulness/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/mindfulness/webjars/stomp-websocket/stomp.min.js"></script>
+  <script src="/mindfulness/app.js"></script>
+
+</head>
+
+<body>
+  <noscript>
+    <h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+      enabled. Please enable
+      Javascript and reload this page!
+    </h2>
+  </noscript>
+  <div id="main-content" class="container">
+    <div class="row">
+      <div class="pt-3">
+        <form class="form-inline">
+          <div class="form-group" id="join-room-form">
+            <label for="join-code">Join Code</label>
+            <input type="text" id="join-code" class="form-control" placeholder="Your code here...">
+          </div>
+          <button id="join-room" class="btn btn-default" type="submit">Join Room</button>
+        </form>
+      </div>
+    </div>
+    <row class="row">
+      <div class="pt-3">
+        <form class="form-inline" id="create-room-form">
+          <div class="form-group">
+            <label for="room-key">Create Room</label>
+            <input type="text" id="room-key" class="form-control" placeholder="Optional name...">
+          </div>
+          <button id="create-room" class="btn btn-default" type="submit">Create Room</button>
+        </form>
+      </div>
+    </row>
+    <div class="row">
+      <div id="user"></div>
+      <div id="room-name"></div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table id="conversation" class="table table-striped">
+          <thead>
+            <tr>
+              <th>Room Messages</th>
+            </tr>
+          </thead>
+          <tbody id="the-mind-messages"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
