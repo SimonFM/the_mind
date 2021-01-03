@@ -35,7 +35,7 @@ public class GameManagerService {
     }
 
     public Player connect(Principal principal) {
-        Player user = new Player(principal.getName(), principal.getName());
+        Player user = new Player(principal.getName(), Integer.toString(activePlayers.size()));
         activePlayers.put(principal.getName(), user);
         return user;
     }
@@ -82,7 +82,7 @@ public class GameManagerService {
             return;
         }
         game.start();
-        sendGameMessage(game, GAME_START_DESTINATION, game, "Game has started...");
+        sendGameMessage(game, getRoomDestination(game), game, "Game has started...");
     }
 
     /***
@@ -108,25 +108,23 @@ public class GameManagerService {
         TheMindGame game = getTheMindGameForByName(invite);
         Set<Player> users = game != null ? game.getPlayers() : null;
         if (users == null) {
-            return create(invite, playerId);
+            return null;
         }
         for (Player player : users) {
-            if (player.getUsername().equalsIgnoreCase(playerId)) {
+            if (player.getId().equalsIgnoreCase(playerId)) {
                 return game;
             }
         }
-        Player player = new Player(playerId, playerId);
-        activePlayers.put(playerId, player);
+        Player player = this.activePlayers.get(playerId);
         game.getPlayers().add(player);
 
-        String message = player.getUsername().concat(" has joined the room");
-        sendGameMessage(game, getRoomDestination(game), message);
+        sendGameMessage(game, getRoomDestination(game), game, player.getId().concat(" has joined the room"));
 
         return game;
     }
 
     private String getRoomDestination(TheMindGame game) {
-        return GAME_BASE_DESTINATION.concat(game.getId());
+        return GAME_BASE_DESTINATION.concat("/").concat(game.getId());
     }
 
     /***
@@ -170,7 +168,7 @@ public class GameManagerService {
         roomMessage.setMessage(message);
 
         for (Player player : game.getPlayers()) {
-            simpMessagingTemplate.convertAndSendToUser(player.getUsername(), url, roomMessage);
+            simpMessagingTemplate.convertAndSendToUser(player.getId(), url, roomMessage);
         }
     }
 }

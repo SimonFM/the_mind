@@ -25,7 +25,7 @@ public class Player implements Principal {
 
     @Override
     public String getName() {
-        return username;
+        return id;
     }
 
     public void addToHand(Integer card) {
