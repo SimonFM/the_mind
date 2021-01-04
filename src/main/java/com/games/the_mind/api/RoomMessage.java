@@ -5,6 +5,7 @@ public class RoomMessage {
     private Object data;
     private String userId;
     private String roomId;
+    private String roomName;
 
     public String getMessage() {
         return message;
@@ -36,5 +37,13 @@ public class RoomMessage {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 }

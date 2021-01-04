@@ -35,7 +35,7 @@ public class GameManagerService {
     }
 
     public Player connect(Principal principal) {
-        Player user = new Player(principal.getName(), Integer.toString(activePlayers.size()));
+        Player user = new Player(principal.getName(), Integer.toString(activePlayers.size() + 1));
         activePlayers.put(principal.getName(), user);
         return user;
     }
@@ -83,6 +83,28 @@ public class GameManagerService {
         }
         game.start();
         sendGameMessage(game, getRoomDestination(game), game, "Game has started...");
+    }
+
+    /***
+     * Starts the TheMindGame with a specific name & sends a message to the relevant Players.
+     * @param name - Name of the game
+     */
+    public void playCard(String name, String playerId, Integer card) {
+        TheMindGame game = getTheMindGameForByName(name);
+        if (game == null || game.getPlayers().isEmpty() || !this.activePlayers.containsKey(playerId) || card <= 0) {
+            return;
+        }
+        Player player = this.activePlayers.get(playerId);
+        if (game.playCard(player, card)) {
+            sendGameMessage(game, getRoomDestination(game), game, "Card Played by " + player.getUsername());
+        } else {
+            sendGameMessage(game, getRoomDestination(game), game, "Unable to play card " + player.getUsername());
+        }
+        if (game.isGameOver()) {
+            sendGameMessage(game, getRoomDestination(game), game, "GAME OVER, you lost all your lives");
+        } else if (game.roundFinished()) {
+            sendGameMessage(game, getRoomDestination(game), game, "Round is finished " + player.getUsername());
+        }
     }
 
     /***

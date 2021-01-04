@@ -40,7 +40,7 @@ public class GameMessagingController {
     }
 
     @MessageMapping("/get")
-    @SendToUser("/topic/game/get")
+    @SendToUser("/topic/game/messages")
     public Object getGame(InviteMessage inviteMessage) throws Exception {
         ApiError error = null;
         TheMindGame game = null;
@@ -90,7 +90,7 @@ public class GameMessagingController {
 
 
     @MessageMapping("/start")
-    @SendToUser("/topic/game/start")
+    @SendToUser("/topic/game/messages")
     public Object start(RoomMessage roomMessage) {
         String roomId = roomMessage == null ? null : roomMessage.getRoomId();
         if (roomId == null || roomId.isBlank()) {
@@ -98,5 +98,18 @@ public class GameMessagingController {
         }
         gameManagerService.startGame(roomId);
         return new APIResponse(HttpStatus.OK, "Start Message received");
+    }
+
+    @MessageMapping("/card")
+    @SendToUser("/topic/game/messages")
+    public Object cardPlayed(RoomMessage roomMessage, Principal principal) {
+        String roomId = roomMessage == null ? "" : roomMessage.getRoomName();
+        String playerId = principal == null ? "" : principal.getName();
+        int card = roomMessage == null ? -1 : (int) roomMessage.getData();
+        if (roomId == null || roomId.isBlank() || playerId == null || playerId.isBlank() || card <= 0) {
+            return new ApiError(HttpStatus.BAD_REQUEST, "Invalid params provided");
+        }
+        gameManagerService.playCard(roomId, playerId, card);
+        return new APIResponse(HttpStatus.OK, "Card Message received");
     }
 }

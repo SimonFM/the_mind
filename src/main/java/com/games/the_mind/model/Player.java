@@ -28,12 +28,25 @@ public class Player implements Principal {
         return id;
     }
 
+    public Set<Integer> getHand() {
+        return hand;
+    }
+
+    public void setHand(Set<Integer> hand) {
+        this.hand = hand;
+    }
+
+
     public void addToHand(Integer card) {
         this.hand.add(card);
     }
 
     public void removeFromHand(Integer card) {
         this.hand.remove(card);
+    }
+
+    public boolean isHandEmpty() {
+        return this.hand.isEmpty();
     }
 
     public boolean hasLowerCard(Integer card) {

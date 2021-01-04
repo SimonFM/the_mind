@@ -54,10 +54,24 @@ public class TheMindGame {
         return name;
     }
 
+
+    public Integer getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public Integer getNinjaStars() {
+        return ninjaStars;
+    }
+
+    public Integer getLives() {
+        return lives;
+    }
+
+    public boolean isGameOver() {
+        return this.lives <= 0;
+    }
+
     private void init() {
-        if (players.size() <= 1) {
-            return;
-        }
         switch (this.players.size()) {
             case 2:
                 this.setTwoPlayerRules();
@@ -68,11 +82,18 @@ public class TheMindGame {
             default:
                 this.setDefaultPlayerRules();
         }
+        this.playedCards = new Stack<>();
         this.cardDeck.shuffle();
     }
 
     public void start() {
         this.started = true;
+        this.drawCards();
+    }
+
+    private void resetCards() {
+        this.playedCards = new Stack<>();
+        this.cardDeck.shuffle();
         this.drawCards();
     }
 
@@ -127,13 +148,30 @@ public class TheMindGame {
         if (this.isNotStarted()) {
             return false;
         }
-        player.removeFromHand(card);
-        Player playerWithLowerCard = this.isValidCard(card);
-        if (playerWithLowerCard == null) {
+        boolean noLowerCardsExist = this.isValidCard(card) == null;
+        if (noLowerCardsExist) {
+            player.removeFromHand(card);
             this.playedCards.push(card);
-            return true;
         }
-        return false;
+        if (!noLowerCardsExist) {
+            this.removeLife();
+        }
+        return noLowerCardsExist;
+    }
+
+    private void removeLife() {
+        this.lives--;
+    }
+
+    public boolean roundFinished() {
+        for (Player player : this.players) {
+            if (!player.isHandEmpty()) {
+                return false;
+            }
+        }
+        this.levelUp();
+        this.resetCards();
+        return true;
     }
 
     private Player isValidCard(Integer card) {

@@ -15,9 +15,10 @@ public class CardDeck {
         for (int i = MINIMUM_CARDS; i <= TOTAL_CARDS; i++) {
             this.cards.add(i);
         }
+        initDeck();
     }
 
-    public void setCards() {
+    private void initDeck() {
         Stack<Integer> cardStack = new Stack<Integer>();
         this.shuffle();
         cardStack.addAll(this.cards);
