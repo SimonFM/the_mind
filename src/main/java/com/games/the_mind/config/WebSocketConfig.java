@@ -20,12 +20,12 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry
-            .addEndpoint("/ws")
+            .addEndpoint("/mindfulness")
             .setAllowedOriginPatterns("*")
             .setHandshakeHandler(new CustomHandshakeHandler());
 
         registry
-            .addEndpoint("/ws")
+            .addEndpoint("/mindfulness")
             .setAllowedOriginPatterns("*")
             .setHandshakeHandler(new CustomHandshakeHandler())
             .withSockJS();

@@ -1,6 +1,7 @@
 package com.games.the_mind.services;
 
-import com.games.the_mind.api.RoomMessage;
+import com.games.the_mind.api.messages.LevelUpMessage;
+import com.games.the_mind.api.messages.RoomMessage;
 import com.games.the_mind.model.Player;
 import com.games.the_mind.model.TheMindGame;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class GameManagerService {
         if (game.isGameOver()) {
             sendGameMessage(game, getRoomDestination(game), game, "GAME OVER, you lost all your lives");
         } else if (game.roundFinished()) {
-            sendGameMessage(game, getRoomDestination(game), game, "Round is finished " + player.getUsername());
+            sendLevelUpMessage(game, getRoomDestination(game), game, "Round is finished " + player.getUsername());
         }
     }
 
@@ -162,6 +163,18 @@ public class GameManagerService {
         return sb.toString();
     }
 
+    private void sendLevelUpMessage(TheMindGame game, String url, Object payload, String message) {
+        if (game == null) {
+            return;
+        }
+        LevelUpMessage levelUpMessage = new LevelUpMessage(true);
+        levelUpMessage.setRoomId(game.getId());
+        levelUpMessage.setUserId("SYSTEM");
+        levelUpMessage.setData(payload);
+        levelUpMessage.setMessage(message);
+        this.sendMessage(game, url, levelUpMessage);
+    }
+
     /**
      * Sends a message to desired TheMindGame with a specific message. Default payload is applied (Empty)
      * @param game - Game to send it to
@@ -188,7 +201,10 @@ public class GameManagerService {
         roomMessage.setUserId("SYSTEM");
         roomMessage.setData(payload);
         roomMessage.setMessage(message);
+        this.sendMessage(game, url, roomMessage);
+    }
 
+    private void sendMessage(TheMindGame game, String url, RoomMessage roomMessage) {
         for (Player player : game.getPlayers()) {
             simpMessagingTemplate.convertAndSendToUser(player.getId(), url, roomMessage);
         }

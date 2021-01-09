@@ -2,6 +2,10 @@ package com.games.the_mind.controllers;
 
 import com.games.the_mind.api.*;
 import com.games.the_mind.api.error.ApiError;
+import com.games.the_mind.api.messages.CreateMessage;
+import com.games.the_mind.api.messages.InviteMessage;
+import com.games.the_mind.api.messages.JoinMessage;
+import com.games.the_mind.api.messages.RoomMessage;
 import com.games.the_mind.model.Player;
 import com.games.the_mind.model.TheMindGame;
 import com.games.the_mind.services.GameManagerService;
@@ -92,24 +96,24 @@ public class GameMessagingController {
     @MessageMapping("/start")
     @SendToUser("/topic/game/messages")
     public Object start(RoomMessage roomMessage) {
-        String roomId = roomMessage == null ? null : roomMessage.getRoomId();
-        if (roomId == null || roomId.isBlank()) {
+        String roomName = roomMessage == null ? null : roomMessage.getRoomName();
+        if (roomName == null || roomName.isBlank()) {
             return new ApiError(HttpStatus.BAD_REQUEST, "Invalid params provided");
         }
-        gameManagerService.startGame(roomId);
+        gameManagerService.startGame(roomName);
         return new APIResponse(HttpStatus.OK, "Start Message received");
     }
 
     @MessageMapping("/card")
     @SendToUser("/topic/game/messages")
     public Object cardPlayed(RoomMessage roomMessage, Principal principal) {
-        String roomId = roomMessage == null ? "" : roomMessage.getRoomName();
+        String roomName = roomMessage == null ? "" : roomMessage.getRoomName();
         String playerId = principal == null ? "" : principal.getName();
         int card = roomMessage == null ? -1 : (int) roomMessage.getData();
-        if (roomId == null || roomId.isBlank() || playerId == null || playerId.isBlank() || card <= 0) {
+        if (roomName == null || roomName.isBlank() || playerId == null || playerId.isBlank() || card <= 0) {
             return new ApiError(HttpStatus.BAD_REQUEST, "Invalid params provided");
         }
-        gameManagerService.playCard(roomId, playerId, card);
+        gameManagerService.playCard(roomName, playerId, card);
         return new APIResponse(HttpStatus.OK, "Card Message received");
     }
 }

@@ -1,15 +1,23 @@
+A simple game based off the game game called "The Mind"
+
 Done: 
-- Unique Anon ids for users
-- Creation of "Rooms"
-- Joining of "Rooms"
-- Unique User messages
-- Room based messages
+- Setup of websockets to backend
+- User specific messages
+- Room messages
+- Unique Users
+- Game Logic:
+  - Starting
+  - Joining
+  - Playing a card
+  - Validating a card
+  - Prevention of game being played
+  - Win conditions
+  - Lose conditions
+  - Leveling up
 
 TODO:
-- Starting of the games
-- Turns for the games
-- Scoring
-- Win conditions
-- Lose conditions
-- Play again features
-- 
+- Game Logic:
+    - Reset game
+- Prevention of joining when game started
+  - Add user as spectator
+- UI Cleaning up 

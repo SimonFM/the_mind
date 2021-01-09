@@ -1,4 +1,4 @@
-package com.games.the_mind.api;
+package com.games.the_mind.api.messages;
 
 public class CreateMessage {
     String name;

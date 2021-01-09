@@ -46,6 +46,10 @@ public class TheMindGame {
         return this.players;
     }
 
+    public Stack<Integer> getPlayedCards() {
+        return playedCards;
+    }
+
     public String getId() {
         return id;
     }
@@ -53,7 +57,6 @@ public class TheMindGame {
     public String getName() {
         return name;
     }
-
 
     public Integer getCurrentLevel() {
         return currentLevel;
@@ -177,6 +180,7 @@ public class TheMindGame {
     private Player isValidCard(Integer card) {
         for (Player player : this.players) {
             if (player.hasLowerCard(card)) {
+                player.removeFromHand(card);
                 return player;
             }
         }
